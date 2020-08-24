@@ -54,6 +54,28 @@ module('Integration | Component | draw control', function(hooks) {
     assert.equal(this.element.querySelector('.test-insertion').textContent.trim(), 'template block text');
   });
 
+  test('the leaflet controls are removed when draw-control is removed', async function(assert) {
+
+    this.set('showControl', true);
+
+    // Template block usage:
+    await render(hbs`
+    {{#leaflet-map lat=lat lng=lng zoom=zoom}}
+      {{#if showControl}}
+        {{draw-control}}
+      {{/if}}
+    {{/leaflet-map}}
+  `);
+
+    // Ensure draw-control exists
+    assert.ok(this.element.querySelector('.leaflet-draw.leaflet-control'), '');
+
+    this.set('showControl', false);
+
+    // Ensure draw-control no longer exists
+    assert.notOk(this.element.querySelector('.leaflet-draw.leaflet-control'), '');
+  });
+
   test('it responds to boolean option for enableEditing', async function(assert) {
     assert.expect(2);
 
